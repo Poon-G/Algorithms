@@ -1,0 +1,57 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <map>
+using namespace std;
+
+
+int main() {
+    string s1;
+    string s2;
+    cin >>s1;
+    cin >>s2;
+    int count = 0;
+    map<char, int>mkanag;
+    map<char, int>mkanag2;
+    
+    if(s1.length() == 0)
+        return s2.length();
+    else if(s2.length() == 0)
+        return s1.length();
+        
+    for(int i = 0;i < s2.length();i++)
+    {
+        if(mkanag.find(s2[i]) != mkanag.end())
+            mkanag[s2[i]]++;
+        else
+            mkanag.insert(std::make_pair(s2[i], 1));
+    }
+    
+    for(int j = 0;j < s1.length();j++)
+    {
+        if((mkanag.find(s1[j]) != mkanag.end()) && (mkanag[s1[j]] > 0))
+            mkanag[s1[j]]--;
+        else
+            count += 1;
+    }
+    
+    for(int i = 0;i < s1.length();i++)
+    {
+        if(mkanag2.find(s1[i]) != mkanag2.end())
+            mkanag2[s1[i]]++;
+        else
+            mkanag2.insert(std::make_pair(s1[i], 1));
+    }
+    for(int j = 0;j < s2.length();j++)
+    {
+        if((mkanag2.find(s2[j]) != mkanag2.end()) && (mkanag2[s2[j]] > 0))
+            mkanag2[s2[j]]--;
+        else
+            count += 1;
+    }
+    
+    cout << count;
+    return 0;
+}
