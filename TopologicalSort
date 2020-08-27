@@ -1,0 +1,75 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<list>
+#include<stack>
+
+class Node{
+	public:
+	int vertices;
+	std::list<int>*adj;
+	Node(int vertices):vertices(vertices),adj(new std::list<int>[vertices]){}
+	void addEdge(int u,int v){
+		adj[u].push_back(v);
+	}
+	int topoSort(){   //using bfs
+	    std::vector<int>Inorder(6,0);
+	    std::queue<int>q;
+	    std::vector<int>visited(6,0);
+	    for(int i=0;i<6;++i){
+		    for(auto it:adj[i]){
+			Inorder[it]++;
+		    }
+	    }
+
+	    for(int i=0;i<Inorder.size();++i){
+		    if(Inorder[i]==0)
+			q.push(i);
+	   }
+	    int cnt = 0;
+	    while(!q.empty()){
+		    int x = q.front();
+		    cnt++;
+		    visited[x]=1;
+		    for(auto it:adj[x]){
+		        //std::cout<<x<<" "<<it<<"\n";
+			    if(!visited[it] && --Inorder[it]==0)
+				    q.push(it);
+		    }
+		    q.pop();
+	    }
+	    if(cnt==vertices)
+		    return 1;
+	    return 0;
+	}
+	void dfs(int u,std::stack<int>&s,std::vector<int>&visited){
+		visited[u]=1;
+		for(auto it:adj[u]){
+			if(!visited[it])
+			 	dfs(it,s,visited);
+		}
+		s.push(u);
+	}
+
+};
+
+int main(){
+	Node g(6);
+	g.addEdge(5,0);
+	g.addEdge(5,2);
+	g.addEdge(2,3);
+	g.addEdge(4,0);
+	g.addEdge(4,1);
+	g.addEdge(1,3);
+	std::stack<int>s;
+	std::vector<int>visited(6,0);
+	for(int i=0;i<6;++i){
+	    if(!visited[i])
+	    g.dfs(0,s,visited);
+	}
+	if(s.size()==6){
+	    std::cout<<"1\n";
+	}else
+	    std::cout<<"0\n";
+	//std::cout<<g.topoSort();
+}
